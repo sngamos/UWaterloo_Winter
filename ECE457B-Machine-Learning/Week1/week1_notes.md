@@ -1,4 +1,4 @@
-# ECE457B Week 1 Notes
+# Week 1 Notes
 
 ## Introductions to Intelligence
 ### Intelligent agent needs to:
