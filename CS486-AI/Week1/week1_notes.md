@@ -150,5 +150,135 @@ that tests if n is a goal node
 7: add ⟨n0, . . . , nk, n⟩to frontier
 ```
 
-**Depth-First search**
-- Uses a stack
+## Depth-First search
+- Uses a stack or recurrsion  
+
+**Depth-First search (Stack)**  
+- Traverse the graph using a certain rule (e.g always go left/ always go right), until there is no more node left.
+- Every visited node is pushed into the stack.
+- Once we have no more child node to traverse to, pop from the stack and visit the other child of the node.
+
+**Depth-First seach (recursive)**  
+- Traverse the graph using a certain rule (e.g always go left/always go right), on the child node selected, run the DFS function on that child node.
+- When the child node eventually terminates due to lack of children, return to the parent node.
+- The DFS algorithm then traverse the other children of the node after the 2nd instance of DFS from the child returns.  
+
+**Depth-First search cycle checking**  
+- searcher can prune a path that ends in a node already on the path.
+
+### Characteristics of DFS 
+**Complexity**   
+b: branching factor (max no. of children per node)  
+m: max depth of the search tree   
+
+**Space complexity**: O(bm)  
+
+**Time complexity**: O(b<sup>m</sup>)
+    
+**Completeness**  
+- DFS **NOT** guaranteed to find a solution if a solution exists
+- Can get stuck in infinite path
+
+**Optimality**  
+- DFS doesn't guarantee to return an optimal solution if it terminates.
+
+**Use cases**  
+- Space is restricted
+- Many solution exists, perhaps with long paths.
+**Misuse cases**  
+- There are infinite paths
+- Optimal solutions are shallow
+- Multiple paths to a node
+
+## Breadth-First search
+- Uses a queue
+
+**Breadth-First search**  
+- Traverse graph withs some rule (always go left/ always go right).
+- Enqueue each node visited to the queue.
+- Visit the child of that node, then enqueue that child node into the queue.
+- Dequeue a node from the queue then visit any unvisited child nodes of that node.
+- Continue till no nodes left unvisited.  
+
+**Multiple path pruning**  
+- prune a path to node n if any previous-found path terminates in n
+- subsumes a cycle check
+- entails storing all nodes it has found paths to
+- want to guarantee optimal solution can still be found
+
+## Characteristics of BFS
+
+**Complexity**  
+- **Space complexity:** O(b<sup>d</sup>)
+- **Time complexity:** O(b<sup>d</sup>)
+
+**Completeness**  
+- BFS is guaranteed to fin a solution if it exists
+- explore the tree level by level until the goal is found
+
+**Optimality**  
+- Not guaranteed to return optimal solution if it terminates.
+- Guaranteed to find shallowest goal node.
+
+**Use cases**  
+- Space not a concern
+- Want a solution in the fewest arcs  
+
+**Misuse cases**
+- All solutions are deep in the tree
+- Problem is large and graph is dynamically generated.
+
+## Iterative Deepening seach (IDS)
+A combination of BFS and DFS
+
+Steps:
+1. Initialize the Depth Limit: Start with a depth limit of 0.
+2. Perform Depth-Limited Search (DLS): Use a DFS algorithm that halts when the depth limit is reached.
+3. Increase the Depth Limit: Increment the depth limit and repeat the DLS until a solution is found or all possibilities are exhausted.
+4. Terminate: If a solution is found, return it. If the depth limit surpasses the maximum depth (or all nodes are exhausted), return failure.
+
+Pseudocode:
+```
+def iterative_deepening_search(start, goal):
+    depth = 0
+    while True:
+        result = depth_limited_search(start, goal, depth)
+        if result == "FOUND":
+            return "Goal Found!"
+        elif result == "NOT_FOUND":  # Indicates all nodes were explored
+            return "Goal Not Found"
+        depth += 1
+
+
+def depth_limited_search(node, goal, depth_limit):
+    if depth_limit == 0:
+        if node == goal:
+            return "FOUND"
+        else:
+            return "LIMIT_REACHED"
+    elif depth_limit > 0:
+        any_cutoff = False
+        for child in expand(node):  # expand(node) generates all possible successors
+            result = depth_limited_search(child, goal, depth_limit - 1)
+            if result == "FOUND":
+                return "FOUND"
+            elif result == "LIMIT_REACHED":
+                any_cutoff = True
+        return "LIMIT_REACHED" if any_cutoff else "NOT_FOUND"
+
+```
+
+**Complexity**
+- Space: O(bd)
+- Time: O(b<sup>d</sup>)
+
+**Completness**
+- Guaranteed to find a solution if it exists
+- explores tree level by level until goal is found
+
+**Optimality**
+- Might not return a optimal solution if it terminates.
+- Guaranteed to find shallowest goal node.
+
+## Lowest cost first search
+
