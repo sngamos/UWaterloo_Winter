@@ -298,9 +298,39 @@ Steps:
 Example:  
 ![alt text](diagrams/LCFS_eg.png)
 
-Steps:  
-1. Push Node A into priority Queue
-    - [(A,0)]
+Red number: order of visit  
+Blue number: cost from starting node
 
+
+**Complexity**
+Space: exponential  
+Time: exponential
+
+**Completeness & Optimality**  
+Yes under mild conditions
+1. Branching factor is finite
+2. Cost of every edge is **strictly positive** (always greater than 0)
+
+## Dijsktra's Algorithm
+
+Variant of LCFS with a kind of mutliple-path pruning.
+
+Implemented with priority queue sorted by cost to reach the node.  
+
+If we can find a lower cost path to a node, we update that value, which requires re-sorting the priority queue.  
+
+A type of dynamic programming, trades space (store cost value for every node) for time. 
+
+Steps:
+1. Initialise node A, with distance 0, all other node to infinity.
+2. Enqueue A into priority queue.
+3. Dequeue A and explore its neighbours.
+    1. (B,2),(C,3), (D,4)
+    2. Enqueue Neighbours into priority queue.
+    3. re-sort the queue.
+4. Dequeue lowest cost node B.
+5. Repeat Step 3
+
+Exploration path: A,B,C,D,E,F,H,G
 
 
