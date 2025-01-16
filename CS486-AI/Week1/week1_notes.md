@@ -281,4 +281,26 @@ def depth_limited_search(node, goal, depth_limit):
 - Guaranteed to find shallowest goal node.
 
 ## Lowest cost first search
+Path cost = Sum of all arcs (edges)
+
+**Implementation**  
+Implemented using priority queue (min heap)  
+
+Steps:
+1. Start from initialised node.
+2. Create a priority queue of neighbour nodes, (lowest to highest weight) from start node.
+3. Dequeue the first element in priortiy queue (lowest cost neighbour)
+4. Explore the edges of this new node, sum up the cost of these new neighbours and the cost of visiting this newly visited node.
+5. Add these neighbours into the priority queue.
+6. Dequeue the next node in priority queue and repeat step 3 - 6.
+
+
+Example:  
+![alt text](diagrams/LCFS_eg.png)
+
+Steps:  
+1. Push Node A into priority Queue
+    - [(A,0)]
+
+
 
