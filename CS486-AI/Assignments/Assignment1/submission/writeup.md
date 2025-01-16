@@ -3,5 +3,6 @@
 Name: Amos Sng  
 Student Number: 21175177
 
-## Problem 1
+## 1. Shortest Route to Waterloo
+
 ### 1.1
