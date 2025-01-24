@@ -13,7 +13,7 @@ Therefore Euclidean distance is a consistent heuristic function.
 
 ## 1.2
 **Full Diagram:**   
-![alt text](diagrams/Assignment1Q1.2Diagram.png)  
+![alt text](diagrams/Assignment1Q1.2FullDiagram.png)  
 **Final Diagram (for ease of viewing):**
 ![alt text](diagrams/Assignment1Q1.2FinalDiag.png)
 The expansion path taken is
