@@ -12,7 +12,10 @@ For func(C) is a function that calculates the actual distance between 2 nodes, h
 Therefore Euclidean distance is a consistent heuristic function.
 
 ## 1.2
-![alt text](diagrams/Assignment1Q1.2Diagram.png)
+**Full Diagram:**   
+![alt text](diagrams/Assignment1Q1.2Diagram.png)  
+**Final Diagram (for ease of viewing):**
+![alt text](diagrams/Assignment1Q1.2FinalDiag.png)
 The expansion path taken is
 ```
 Tor (Start)--> Mis --> Mil --> Gue --> Kit --> Wat (Goal)
