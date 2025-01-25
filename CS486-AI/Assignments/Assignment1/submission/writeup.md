@@ -1,4 +1,4 @@
-# CS486 Assingment 1 submission
+CS486 Assingment 1 submission
 
 Name: Amos Sng  
 Student Number: 21175177
@@ -39,3 +39,8 @@ To represent a general TSP problem suitable for A*, each state of the search wil
 The inital state is when the salesman starts at any city in the given graph, with an empty visit history set other than the city he started in. For example, ("T", ["T"], 0) indicates that the salesman started this traversal at Toronto with the total travel cost of 0.  
 The goal state of the TSP problem represented for A* is when all the cities in the graph have been visited at least once and the salesman returns to the starting city. For example, ("T", ["T","G","H","B","W"],584) indicates the sales person has started from Toronto, then traversed through Guelph, Hamilton, Barrie, Waterloo, then back to Toronto in that order, thus completing the TSP traversal.  
 To generate the neighbours from any current city, move to any unvisited city (i.e check the list of visited cities and travel to any city not in the list), then add that city into the visited city list, and increase the total cost based on the cost of the edge betwwen the current city and the neighbour that will be traversed.  
+
+To calculate the F value for A* search, where F = C + H, where C is the cost of traversing a particular edge between 2 cities and H be the heuristic value of a given city to visit. H can be determined using a Heuristic function, for example a Minimum Spanning Tree (MST) function that calculates the minumum total cost of traversing the remaining unvisited nodes in the graph.  
+By establishing these representations, we are able to conduct A* search on any generic TSP graph.
+
+
