@@ -117,8 +117,7 @@ To formulate this as a search problem using the Lowest-cost-first search, we exe
 6. Repeat step 2-5 until either a goal is found or the search space is exhausted.  
 
 ### 3.4  
-The memory complexity is O(|V|<sup>n,</sup>). For the 1st word, the frontier stores |V| costs of travelling to each word in V. Similarly, for the 2nd word, the frontier has to store |V| costs of travelling to each 2nd word from each first word. This causes |V|<sup>2</sup> memory complexity for n =2. Extending this to the n<sup>th</sup> word, the complexity is hence O(|V|<sup>n</sup>).  
-
+The memory complexity is O(|V|<sup>n,</sup>). For the 1st word, the frontier stores |V| costs of travelling to each word in V. Similarly, for the 2nd word, the frontier has to store |V| costs of travelling to each 2nd word from each first word. This causes |V|<sup>2</sup> memory complexity for n =2. Extending this to the n<sup>th</sup> word, the complexity is hence O(|V|<sup>n</sup>).
 
 
 
