@@ -5,7 +5,8 @@ implementation. Please do not change other parts of the code, including the
 function signatures; however, feel free to add imports.
 """
 import model
-
+import math
+import heapq
 
 def decode(model: model.LanguageModel, k: int = 2, n: int = 3) -> str:
     """Lowest-cost-first search with frontier size limit.
@@ -23,7 +24,38 @@ def decode(model: model.LanguageModel, k: int = 2, n: int = 3) -> str:
         2. model.prob(w: str, c: List[str]) gives you the probability of word
            w given previous context c.
     """
-    pass  # (TODO) complete this function
+    
+    frontier = [] # create a priority queue
+
+    heapq.heappush(frontier, (0, [])) # (cost, sentence)
+
+    while frontier: 
+        # pop the lowest cost prefix
+        cost, prefix = heapq.heappop(frontier)
+
+        # if the prefix is of length n, return it
+        if len(prefix) == n:
+            return ' '.join(prefix)
+        elif len(prefix) < n:
+            for w in model.vocab():
+                p = model.prob(w, prefix)
+                # avoid log(0)
+                if p > 0:
+                    new_cost = cost - math.log(p)
+                    new_prefix = prefix + [w]
+                    heapq.heappush(frontier, (new_cost, new_prefix))
+            # if frontier exceed size k, prune the highest cost states
+            if len(frontier) > k:
+                all_states = []
+                while frontier:
+                    all_states.append(heapq.heappop(frontier)) # all_states will be sorted in ascending order
+                best_k = all_states[:k]
+                for state in best_k:
+                    heapq.heappush(frontier, state)
+    return ''
+                
+
+
 
 
 if __name__ == '__main__':
