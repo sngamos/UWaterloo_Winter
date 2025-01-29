@@ -3,33 +3,7 @@ import random
 import numpy as np
 
 
-class LanguageModel:
-    def __init__(self, index: int = 0):
-        random.seed(index)
-        np.random.seed(index)
-        self._vocab = ['a', 'b', 'c', 'd', 'e']
-        self._probs = np.random.rand(len(self._vocab), len(self._vocab))
-        self._probs = self._probs / np.sum(self._probs, axis=1)[:, None]
-        self._prob_vocab = np.random.rand(len(self._vocab))
-        self._prob_vocab = self._prob_vocab / np.sum(self._prob_vocab)
 
-    def vocab(self) -> List[str]:
-        return self._vocab
-
-    def prob(self, w: str, c: List[str]) -> float:
-        if len(c) == 0:
-            return self._prob_vocab[self._vocab.index(w)]
-        return self._probs[self._vocab.index(c[-1]), self._vocab.index(w)]
-
-
-if __name__ == '__main__':
-    lm = LanguageModel()
-    print(lm._vocab)
-    print(lm._probs)
-    from IPython import embed; embed(using=False)
-
-
-'''
 class LanguageModel:
     def __init__(self, index: int = 0):
         if index == 0:
@@ -62,4 +36,6 @@ class LanguageModel:
             The probability of word w given previous context c.
         """
         return self._probs.get((w, ' '.join(c)), 0.0)
-'''
+
+
+
