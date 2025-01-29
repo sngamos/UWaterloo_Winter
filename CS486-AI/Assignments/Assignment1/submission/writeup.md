@@ -68,6 +68,56 @@ h("W") = 312 + 121 = 433
 ### 2.e  
 ![alt text](diagrams/Assignment2Qe.png)
 
+## 3. Sentences with the Highest Probability
+### 3.1 
+No, a greedy algorithm does not always yield the highest-probability sentence. This can be seen from the example below.  
+First let our vocabulary be V = {A, B}, such that |V| = 2 $\le$ 3, and our sentence is of length n = 2.  
+In this setup, in the autogressive model, the probability of the sentence <w<sub>1</sub>, w<sub>2</sub>, <$EOS$>> is P<sub>Θ</sub>(w<sub>1</sub>) x P<sub>Θ</sub>(w<sub>2</sub>|w<sub>1</sub>) x P<sub>Θ</sub>(<$EOS$>|w<sub>1</sub>,w<sub>2</sub>).
+Let us estabilish that the 1st word probabilities are:  
+P<sub>Θ</sub>(A) = 0.6  
+P<sub>Θ</sub>(B) = 0.4  
+and the 2nd word probabilities are:  
+P<sub>Θ</sub>(A|A) = 1   
+P<sub>Θ</sub>(B|A) = 0   
+P<sub>Θ</sub>(B|B) = 1  
+P<sub>Θ</sub>(B|A) = 0  
+This means that the greedy algorithm will pick A for the first word since 0.6 > 0.4. Then after choosing A for the 1st word, it will always pick A again for w<sub>2</sub> since 1 > 0.  
+Similarly, if B is chosen as w<sub>1</sub>, then B will be picked again for w<sub>2</sub>.  
+We then establish that the probability of <$EOS$> given the 2 word prefix is:  
+P<sub>Θ</sub>(<$EOS$> | A,A) = 0.1  
+P<sub>Θ</sub>(<$EOS$> | B,B) = 0.9  
+From this example, we can then derive that the probabilities of the 2 possible sentences of length n = 2 are:  
+Sentence <A,A,<$EOS$>>:  
+P<sub>Θ</sub>(A) x P<sub>Θ</sub>(A|A) x P<sub>Θ</sub>(<$EOS$>|A,A)= = 0.6 x 1 x 0.1 = 0.06  
+Sentence <B,B,<$EOS$>>:  
+P<sub>Θ</sub>(B) x P<sub>Θ</sub>(B|B) x P<sub>Θ</sub>(<$EOS$>|B,B)= = 0.4 x 1 x 0.9 = 0.36
+From this we can see that the higher-probability senstence is actually <B,B,<$EOS$>>, however the greedy algorithm will yield <A,A,<$EOS$>>, which is the less probable sentence. As such making the locally optimal choice at each step does not guatantee the overall best sentence.
+
+### 3.2  
+Given that we want to find the single highest probability sentence of length n, and each API call is constant time, for each sentence <w<sub>1</sub>, w<sub>2</sub>,...,w<sub>n</sub>>, we would need to compute P<sub>Θ</sub>(w<sub>1</sub>) x P<sub>Θ</sub>(w<sub>2</sub>|w<sub>1</sub>) x ... x P<sub>Θ</sub>(w<sub>n</sub>|w<sub>1</sub>,...,w<sub>n-1</sub>). This will take n calls to the API, which each call takes constant time, resulting in O(n) complexity.
+The total time complexity would be in the order of O(n)
+
+### 3.3
+**State:** represents a partial prefix of the sentence, e.g State = <w<sub>1</sub>, w<sub>2</sub>,..., w<sub>m</sub>>, where m $\le$ n.  
+**Initial State:** is the empty prefix, i.e State = < >, where no words have been chosen yet.  
+**Goal State:** any state that has exactly n words and an <$EOS$> token, e.g a sentence of length n=2 will have goal state of: <w<sub>1</sub>, w<sub>2</sub>,<$EOS$>>.  
+**Successor Function:** is the function implemented by the API of the language model that will calculate the probability of the next word, w, using the function prob(w,c).  
+**Cost Function:** The model gives the probability of each next word, P<sub>Θ</sub>(w|w<sub>1</sub>,..., w<sub>m</sub>), i.e prob(w,c). Since a higher probability should equate to lower cost, we can let the cost be the negative logarithmic function of the probability obtained from prob(w,c), i.e Cost = -log(P<sub>Θ</sub>(w<sub>m</sub>|w<sub>1</sub>,..., w<sub>m-1</sub>)).  
+Then we can conclude that the total cost to achieve this state is:  
+Cost = -$\sum_{i=1}^{m}log P$<sub>Θ</sub> (w<sub>i</sub> | w<sub>1</sub>,..., w<sub>i-1</sub>).
+Therefore by minimizing this sum, it is equivilent to maximizing the sequence's total probability.  
+To formulate this as a search problem using the Lowest-cost-first search, we execute the following steps:  
+1. Initialize a priority queue of states, and insert the intial state, State = < > and cost = 0.
+2. Pop from the priority queue the state, s, with the lowest cost so far.  
+3. Check if s is a goal.
+    - if s has length n and the last token is <$EOS$>, return s.
+    - else continue.
+4. Expand state s = <w<sub>1</sub>,..., w<sub>m</sub>> to its successors by appending each possible w $\in$ V, or <$EOS$> if m = n, and compute the new cost. new_cost = current_cost + (-log P<sub>Θ</sub> (w | w<sub>1</sub>,..., w<sub>m</sub>)).  
+5. push each successor state s' = (w<sub>1</sub>,...,w<sub>m</sub>,w) with new_cost into priority queue.  
+6. Repeat step 2-5 until either a goal is found or the search space is exhausted.  
+
+### 3.4  
+The memory complexity is O(|V|<sup>n,</sup>). For the 1st word, the frontier stores |V| costs of travelling to each word in V. Similarly, for the 2nd word, the frontier has to store |V| costs of travelling to each 2nd word from each first word. This causes |V|<sup>2</sup> memory complexity for n =2. Extending this to the n<sup>th</sup> word, the complexity is hence O(|V|<sup>n</sup>).  
 
 
 
