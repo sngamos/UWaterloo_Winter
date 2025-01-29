@@ -39,8 +39,36 @@ To represent a general TSP problem suitable for A*, each state of the search wil
 The inital state is when the salesman starts at any city in the given graph, with an empty visit history set other than the city he started in. For example, ("T", ["T"], 0) indicates that the salesman started this traversal at Toronto with the total travel cost of 0.  
 The goal state of the TSP problem represented for A* is when all the cities in the graph have been visited at least once and the salesman returns to the starting city. For example, ("T", ["T","G","H","B","W"],584) indicates the sales person has started from Toronto, then traversed through Guelph, Hamilton, Barrie, Waterloo, then back to Toronto in that order, thus completing the TSP traversal.  
 To generate the neighbours from any current city, move to any unvisited city (i.e check the list of visited cities and travel to any city not in the list), then add that city into the visited city list, and increase the total cost based on the cost of the edge betwwen the current city and the neighbour that will be traversed.  
-
 To calculate the F value for A* search, where F = C + H, where C is the cost of traversing a particular edge between 2 cities and H be the heuristic value of a given city to visit. H can be determined using a Heuristic function, for example a Minimum Spanning Tree (MST) function that calculates the minumum total cost of traversing the remaining unvisited nodes in the graph.  
 By establishing these representations, we are able to conduct A* search on any generic TSP graph.
+
+### 2.b 
+The cost function is the function that calculates the total sum of all costs pertaining to the edged traversed from the starting city to the current city.  
+For example if the current state is ("G", ["T","H","G"],126), this means we started from Toronto, traversed the graph through the path, Toronto --> Hamilton --> Guelph, so the total cost, C = Cost of travelling from T to H + Cost of travelling from H to G. Hence C = 77 + 49 = 126.
+
+### 2.c  
+A possible heuristic function h(n) for node n can be a Minimum Spanning Tree (MST) of the remaining unvisited nodes and returning to the start.  
+We can caluclate h(n) by using the following formula:  
+h(n) = MST of unvisited cities + min(edge from an unvisited city back to start)  
+We can use the h(n) heuristic to provide us information on which node to traverse next by computing the h(n) values of the unvisited nodes.  
+For example, given the state ("G",["T","H","G"],126), i.e the current city is Guelph (G), we traversed T--> H --> G in that order, and the total cost of traversal by far is 126.  
+To calculate the h(n) value, we first calculate the MST for remaining cities "B" and "W".  
+B --> W = 169  
+G --> B = 143  
+G --> W = 36
+We can traverse from G through the 2 remaining cities using G --> W --> B, where the MST cost is 36+169=205.  
+Alternatively, we can traverse through the path G --> B --> W, where the MST cost is 143+169=312.  
+Then we compute the min(edge from unvisited node back to start), where:  
+B --> T = 106  
+W --> T = 121
+Thereforce in this example the  
+h("B") = 205 + 106 = 311  
+h("W") = 312 + 121 = 433  
+
+### 2.e  
+![alt text](diagrams/Assignment2Qe.png)
+
+
+
 
 
