@@ -1,4 +1,5 @@
 # Intro to Artificial Intelligence Week 1 Notes
+# Intro to Artificial Intelligence Week 1 Notes
 
 ## Agents
 
