@@ -614,3 +614,421 @@ b: random steps is better as it can help it escape since the local minima is not
     3. mutate some values
 - stop when solution is found
 
+## Inference and Planning
+### Problem solving
+- Procedural
+    - devise an algorithm
+    - program the algorithm
+    - execute program
+- Declarative
+    - Identify the knowledge needed
+    - Encode the knowledge in representation (knowledge base a.k.a KB)
+    - Use logical consequence of KB to solve the problem
+
+### Proof of procedures
+A logic consists of 
+- Syntax: what is an acceptable sentence
+- Semantics: what do the sentences/symbols mean
+- Proof procedure: how do we construct valid proofs
+
+A proof: a sequence of sentences derivable using an inference rule
+
+### Logical Connectives
+- and (conjunction): $\land$
+- or (disjunction): $\lor$
+- not (negation): $\lnot$
+- if ... then ... (implication): $\implies$
+    - Note: logical statements with implication can be written both ways A $\implies$ B = B $\implies$ A
+- ... if and only if ...: $\iff$
+
+### Implication truth table
+def: A $\implies\ B means:  
+```
+if A is True then B is True
+```
+|A|B|A $\implies$ B|Explanation|
+|-|-|--------------|-----------|
+|T|T|T|B is a consequence of A, hence True.|
+|T|F|F|B is not a consequence of A, hence False.|
+|F|F|T|A is not even True, initial statement of "A is given to be True" doesn't hold, vacuously True|
+|F|T|T|A is not even True, initial statement of "A is given to be True" doesn't hold, vacuously True|
+
+Notice that the implication truth table has the same truth table as $\lnot A \lor B$
+|A|B|A $\implies$ B|$\lnot$ A $\lor$ B|
+|-|-|--------------|------------------|
+|T|T|T|T|
+|T|F|F|F|
+|F|T|T|T|
+|F|F|T|T|
+
+From this we can understand that implication means 2 different things:  
+- my conclusion is true (T,T --> T and F,T --> F)  
+- my initial assumption is false (F,T -- T and F,F --> T)
+
+This means that if my initial assumption is false, then I'm not even concern about the conditional, we can just say the statement is True just because the initial assumption is not satisfied.  
+
+### Logical Consequence
+- {X} is a set of `statements` or `premises`, made up of `propositions`
+- A set of truth assignments to the propositions in {X} is an `interpretation`
+- A model of {X} is an interpretation that makes {X} true
+- We say that the world in which these truth assignments hold is a `model` (a verifiable example) of {X}
+- {X} is `inconsistent` if it has `no model`
+- Statement A is a logical consequence of a set of statements {X} if A is true in every model of {X}
+
+Example:  
+Premise 1 (P<sub>1</sub>): if `I play hockey`, then `i'll score a goal`, if `the goalie is not good`  
+Premise 2 (P<sub>2</sub>): if `I play hockey`, `the goalie is not good`  
+Conclusion (D): if `I play hockey`, then `i'll score a goal`
+
+Breakdown:  
+let A = `I play hockey`, B = `goalie is good` , C = `i'll score a goal`
+P<sub>1</sub>: A $\implies$ ( $\lnot$ B $\implies$ C)  
+P<sub>2</sub>: A $\implies$ $\lnot$ B
+D: P $\implies$ C
+
+Since from P<sub>2</sub> we know that whenever A is true, it implies that $\not$ B is true.  
+Since we now know $\lnot$ B is a `given` whenever A is True, then from P<sub>1</sub> we can imply D.
+
+#### Argument validity
+An argument is valid if any of the following is true: (these 4 statements are identical)
+- conclusions are `logical consequences` of the premises
+- conclusions are true in `every model` of the premises
+- there is no situation in which the premises are all true, but the conclusions are false
+- argument $\implies$ conclusion is a `tautology` (always true)
+
+### Bottom up proofs (a.k.a forward chaining)
+- start from facts and use rules to generate all possible propositions 
+    - rain <-- clouds $\land$ wind
+    - clouds <-- humid $\land$ cyclone
+    - clouds <-- near_sea $\land$ cyclone
+    - wind <-- cyclone
+    - near_sea (a fact assumed to be true)
+    - cyclone (a fact assumed to be true)
+    Steps:
+        1. {near_sea}
+        2. {near_sea, cyclone}
+        3. {near_sea, cyclone, wind} (from wind <-- cyclone)
+        4. {near_sea, cyclone, wind, clouds} (from clouds <-- near_sea $\land$ cyclone)
+        5. {near_sea, cyclone, wind, clouds, rain} (from rain <-- clouds $\land$ wind)
+
+### Top Down proofs
+- start from query and work backwards
+    - rain <-- clouds $\land$ wind
+    - clouds <-- humid $\land$ cyclone
+    - clouds <-- near_sea $\land$ cyclone
+    - wind <-- cyclone
+    - near_sea (fact assumed to be true)
+    - cyclone (fact assumed to be true)
+    Steps: (start with rain being proved to be true, i.e yes <-- rain)
+        1. yes <-- rain
+        2. yes <-- clouds $\land$ wind (from rain <-- clouds $\land$ wind)
+        3. yes <-- near_sea $\land$ cyclone $\land$ wind (from clouds <-- near_sea $\land$ cyclone)
+        4. yes <-- near_sea $\land$ cyclone $\land$ cyclone (from wind <-- cyclone)
+        5. yes <-- near_sea $\land$ cyclone
+
+### Planning
+given:
+- a description of effects and preconditions of the actions
+- a description o the initial state
+- a goal to achieve  
+
+Find a sequence of actions that is possible and will result in a state satisfying the goal
+
+#### Forward Planning
+Idea: search in the state-space graph
+- nodes represent the states
+- arcs correspond to the actions: the arcs from a state s represent all the actions that are legal in state s
+- a plan is a path from the state representing the initial state to a state that satisfies the goal
+- can use any of the search techniques from before
+- heuristics important
+
+#### Regression Planning
+Idea: search backwards from goal description: nodes correspond to subgoals, and arcs to actions
+- Nodes are propositions: a formula made up of assignments of values to features (T,T,F,T,...)
+- Arcs correspond to actions that can achieve one of the goals
+- Neighbors of node N associated with arc A specify what must be true immediately before A so that N is true immediately after
+- the start node is the goal to be achieved
+- goal(N) is true if N is a proposition that is true of the initial state
+
+
+## Learning
+
+### Types of learning:
+- **Supervised classification**: given a set of pre-classified training examples, classify a new instance
+- **Unsupervised learning**: Find natural classes for examples
+- **Reinforcement learning**: determine what to do based on rewards and punishment
+- **Transfer learning**: learning from an expert
+- **Active learning**: learner actively seeks to learn
+- **Inductive logic programming**: build richer models in terms of logic programs
+
+### Feedback
+Learning tasks can be characterized by the feedback given to the learner
+- **Supervised learning**: what has to be learned is specified for each example
+- **Unsupervised learning**: no classifications are given, learner has to discover categories and regularities in the data
+- **Reinforcement learning**: feedback occurs after a sequence of actions; a form of supervised learning
+
+### Measuring success
+- The measure of success is not how well the agent performs on the training examples, but how well the agent performs for new (unseen) examples, i.e the test set.
+
+### Bias
+- tendency to prefer one hypothesis over another is called a bias
+- a bias is necessary to make predictions on unseen data
+- saying a hypothesis is better than N's or P's hypothesis isn't something that's obtained from the data
+- to have any inductive process make predictions on unseen data, you need a bias
+- what constitutes a good bias is empirical, differs case by case based on context
+
+### Learning as a search
+- given a representation and a bias, the problem of learning can be reduced to one of a search
+- learning is search through the space of possible representations looking for the representation or representations that best fits the data, given the bias.
+- search spaces are typically prohibitively large for systematic search
+- learning algorithm is made of:
+    1. search space
+    2. evaluation function
+    3. search method
+
+## Supervised learning
+Given:
+- set of input features $X_1,X_2,...,X_n$
+- set of target features $Y_1,Y_2,...,Y_n$
+- training set: a set of training examples where the values for the input features and target features are given for each example
+- test set: a set of test examples, where only the values for the input features are given
+
+Predict the values for the target features for the test examples
+- **Classification**: the $Y_i$ are discrete
+- **Regression**: the $Y_i$ are continuous
+- Important to keep the training and test set separate
+
+### Noise
+- Data isn't perfect
+    - features assigned the wrong value
+    - inadequate features provided to predict classification
+    - examples with missing features
+- Overfitting occurs when a distinction appears in the data, but doesn't appear in the unseen examples
+    - due to random correlations in the training set
+
+### Evaluating predictions
+Suppose: Y is feature, e is example
+- $Y(e)$ is the value of feature $Y$ for example e
+- $\hat{Y}(e)$ is the predicted value of feature $Y$ for example e
+- the `error` of the prediction is a measure of how close $\hat{Y}(e)$ is to $Y(e)$
+- there are many possible errors that could be measured
+
+### Measures of Error
+E is the set of examples
+$T$ is the set of target features
+- Absolute error:
+    > $\sum_{e \in E}{\sum_{Y \in T}{|Y(e)-\hat{Y}(e)|}}$
+- Sum of squares error
+    > $\sum_{e \in E}{\sum_{Y \in T}{(Y(e)-\hat{Y}(e))^2}}$
+- Worst case error
+    > $ max_{e\in E}max_{Y\in T}|Y(e)-\hat{Y}(e)|$
+- cost-based error takes into account costs of various errors
+
+### Precision and Recall
+- Not all errors are equal:
+    - predict a patient has a disease when they do not
+    - predict a patient doesn't have a disease when they do
+- need to map out both kinds of errors to find the best trade-off
+
+![alt text](diagrams/precision_recall_table.png){width=50%}
+
+- **recall** = **sensitivity** = TP/(TP+FN)
+- **specificity** = TN/(TN+FP)
+- **precision** = TP/(TP+FP)
+- **F1-score** = (2 * Precision * Recall)/(Precision + Recall)
+    - gives even weight to precision and recall
+
+### Reviver Operating Curve (ROC)
+
+![alt text](diagrams/ROC.png){width=50%}
+The ROC gives full range of performance of an algorithm across different biases
+
+## Decision Trees
+
+Supervised learning from discrete data:
+- Representation is a decision tree
+- Bias towards simple Decision Tree
+- Search through space of decision trees, from simple trees to more complex ones
+
+Attributes of Decision Tree:
+- Nodes - input attributes/features
+- Branches: labeled with input feature value
+- Leaves: predictions for target features (point estimate)
+- Can have many branches per node
+- branches can be labeled with multiple feature values
+
+### Learning a Decision Tree
+- Incrementally split training data
+- Recursively solve sub-problems
+- Challenge: finding a good bias
+    - small decision tree
+    - good classification (low error on training data)
+    - good generalization (low error on test data)
+
+#### Pseudocode
+```
+X <-- input features
+Y <-- output features
+E <-- Training examples
+output is a decision tree, which is either
+    - a point estimate of Y
+    - of the form < X_i,T_1,...,T_N >
+    X_i is an input feature and T_1,...T_N are decision trees
+
+func DecisionTreeLearner(X,Y,E)
+    if stopping criteria is met then
+        return pointEstimate(Y,E)
+    else
+        select feature X_i in X
+        for each value of x_i of X_i = x_i do
+            E_i =  all examples in E where X_i = x_i
+            T_i =  DecisionTreeLearner(X\{X_i},Y,E_i)
+        end for 
+        return <X_i,T_1,T_N>
+end func
+```
+
+### Stopping criteria
+- No more features
+- performance on training data is good enough
+
+### Feature selection
+- ideally: choose sequence of features that result in smallest tree
+- actually: myopically split - as if only allowed one split, which feature would give best performance
+- Heuristics for best performing feature:
+    - Most even split
+    - Max information gain
+    - GINI index
+
+## Information Theory
+- n bit can distinguish $2^n$ items
+- can do better by taking probabilities into account
+- in general need $-log_2{P(x)}$ bits to encode x
+- Each symbol requires on average: $-P(x)log_2{P(x)}$ bits
+- to transmit an entire sequence distributed according to P(x), we need on average: $\sum_x-P(x)log_2{P(x)}$ bits of information we wish to transmit
+- information content a.k.a entropy of the sequence
+
+### Information gain
+Given a set E of N training examples, if the number of examples with output feature Y=y<sub>i</sub> is N<sub>i</sub> then $P(Y=y_i) = P(y_i) = \frac{N_i}{N}$
+Total information content of set E is I(E) = $-\sum_{y_i\in Y}P(y_i)log_2P(y_i)$
+After splitting E into E<sub>1</sub> and E<sub>2</sub> with size N<sub>1</sub> and N<sub>2</sub> based on input attribute X<sub>i</sub> the information content is I(E<sub>split</sub>)= $\frac{N_1}{N}I(E_1)+\frac{N_2}{N}I(E_2)$  
+We want to maximize the information gain: I(E) - I(E<sub>split</sub>)
+Information gain is always non-negative
+- information gain is the reduction in uncertainty about the output feature Y given the value of a certain input feature X
+- IG(E,X) = I(E)-I(E<sub>split</split>) = $-\sum_{y\in Y}P(y)log_2P(y) - \frac{N_1}{N}I(E_1)+\frac{N_2}{N}I(E_2)$ = $-\sum_{x\in X, y\in Y}P(x,y)log(\frac{P(x)P(y)}{P(x,y)})$  
+Jensen's inequality: for a convex function f(x), E|[f(x)] $\ge$ f(E{x}), since -log() is a convex function,  
+- IG(E,X) = I(E)-I(E<sub>split</split>) = $-\sum_{y\in Y}P(y)log_2P(y) - \frac{N_1}{N}I(E_1)+\frac{N_2}{N}I(E_2)$ = $-\sum_{x\in X, y\in Y}P(x,y)log(\frac{P(x)P(y)}{P(x,y)})$ $\ge$ $-log(\sum_{x\in X, y\in Y}P(x,y)\frac{P(x)P(y)}{P(x,y)})$ = 0
+- Hence information gain $\ge$ 0
+
+### Final return value
+- Point estimate is just a prediction of target features
+    -  mean value
+    - median value
+    - most likely classification
+    e.g $P(Y=y_i) = \frac{N_i}{N}$
+    where 
+    - N<sub>i</sub> is the number of training samples at the leaf with Y = y<sub>i</sub>
+    - N is tht total number of training samples at the leaf
+
+### using priority queue to learn DT
+Idea: sort the leaves using priority queue ranked by how much information can be gained with the best feature at that leaf
+- always expand the leaf at the top of the queue (highest information gained from expanding that splitting at that feature)
+
+### Overfitting
+- DT is too good at classifying training data, will not generalize well.
+- occurs when there is not much data
+- Methods to prevent:
+    - regularization: prefer small decision trees over big ones, add a 'complexity' penalty to the stopping criteria - stop early
+    - pseudocounts: add some data based on prior knowledge
+    - cross validation
+- Test set errors caused by:
+    - Bias: the error due to the algorithm finding an imperfect model
+        - representation bias: model too simple
+        - search bias: not enough search
+    - Variance: error due to lack of data
+    - Noise: error due to the data depending on features not modeled or because the process generating the data is inherently stochastic
+    - Bias-variance trade-off
+        - complicated model, not enough data: (low bias, high variance)
+        - simple model, lots of data: (high bias, low variance)
+- Capacity: the model's ability to fit a wide variety of functions, the inverse of bias
+- Fitting Diagrams:
+    ![alt text](image.png){width=50%}
+
+### Cross validation
+- split `training` data into training and validation set
+- use the validation set as a 'pretend' test set
+- Optimize the decision maker to perform well on the validation set, `not the training set`
+- can do this multiple times with different validation sets
+
+## Bayesian networks
+
+### Uncertainty
+- Agents don't know everything but need to make decision anyways
+- Decisions are made in absence of information, or in presence of noisy information
+Agent can only know how uncertain it is, act accordingly
+
+### Probability: Frequentist vs Bayesian
+Frequentist: 
+    - P(heads) = $\frac{no. heads}{no. flips}$
+    - P(heads) this time =  P(heads) from history
+    - Uncertainty is ontological: pertaining to the world
+Bayesian:
+    - P(heads) this time =  agent's `belief` about flip
+    - belief of agent A: based on previous experience of agent A
+    - Uncertainty is epistemological: pertaining to knowledge
+
+### Graph representation of bayesian probability
+- Blue line: graph before any flips
+- Red line: after flipping 2 heads in a row
+- Green line: after flipping 2 tails in a row
+![alt text](diagrams/bayesian_dist_graph.png){width=50%}
+
+### Probability measure
+- if X is random variable (feature, attribute)
+- it can take on values x, where x $\in$ Domain(X)
+- Assume x is discrete,
+    P(x) is the probability that X = x
+    Joint probability P(x,y) is the probability that X=x and Y=y at the same time
+
+### Conditional Probability
+P(X|Y) is the probability X =x given that Y=y
+P(X|Y) != P(X) if X and Y are not independent
+#### with independence 
+P(X|Y,Z) = P(X|Y) if Y and Z are independent given Y
+#### Chain rule
+P(X,Y) = P(X|Y)P(Y) = P(Y|X)P(X)
+#### Bayes' rule
+$P(X|Y) = \frac{P(Y|X)P(X)}{P(Y)}$
+#### Sum rule
+$\sum_xP(X=x,Y) = P(Y)$
+#### Conditional independence
+X & Y independent iff
+- P(X) = P(X|Y)
+- P(Y) = P(Y|X)
+- P(X,Y) = P(X)P(Y)
+Learning Y doesn't influence belief about X  
+
+X & Y are `conditionally independent` given Z iff
+- P(X|Z) = P(X|Y,Z)
+- P(Y|Z) = P(Y|X,Z)
+- P(X,Y|Z) = P(X|Z)P(Y|Z)
+Learning Y doesn't influence beliefs about X if you already know Z, does not mean X and Y are independent
+
+### Belief networks
+- Directed Acyclic Graphs (DAG)
+- Encodes independencies ina graphical format
+- Edges give P(X<sub>i</sub>|parents(X<sub>i</sub>))
+- Example, given bayesian network of: 
+    A --> C --> G --> L --> S
+    - Learning any value of A,C,G,L change the assessment of P(S)
+    - S is not independent of A,C,G,L
+    but
+    - If the value of L is given, learning the value of A,C,G `won't` change assessment of P(S)
+    - S is `conditionally independent` of A,C,G given L
+### Semantics of a Bayes' Network
+- every x<sub>i</sub> is conditionally independent of all its nondescendants given its parents
+    - $P(X_i|S, Parents(X_i)) = P(X_i|Parents(X_i))$
+        - for any S $\subset$ NonDescendants(X<sub>i</sub>) 
+- Joint probability distribution is formed by multiplying conditional probabilities together
+    - $P(X_1,X_2,...,X_n) = \prod_i{P(X_i|parents(X_i))}$
+
