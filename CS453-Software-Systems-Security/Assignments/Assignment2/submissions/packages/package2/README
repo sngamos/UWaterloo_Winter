@@ -1,0 +1,1 @@
+We exploit the fuzzer's statelessness by requiring a precise multi-byte input match that is unlikely to occur, thus evading its random mutation heuristics.

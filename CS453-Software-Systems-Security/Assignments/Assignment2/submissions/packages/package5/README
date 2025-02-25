@@ -1,0 +1,1 @@
+We target the fuzzer's difficulty in satisfying rigid, interdependent structural conditions. The fuzzer has difficulty finding a certain type of input (palindrome) that will crash the program.

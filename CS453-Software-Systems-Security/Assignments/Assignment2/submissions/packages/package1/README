@@ -1,0 +1,1 @@
+This program exploits a precision hash match to trigger a divide-by-zero bug when input exactly equals a specific 64-byte sample. AFL cannot find the exact match easily.

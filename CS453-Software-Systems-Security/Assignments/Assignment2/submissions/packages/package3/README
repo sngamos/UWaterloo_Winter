@@ -1,0 +1,1 @@
+We exploit the fuzzer's inability to generate fully specific structural properties, in this case a sorted input.

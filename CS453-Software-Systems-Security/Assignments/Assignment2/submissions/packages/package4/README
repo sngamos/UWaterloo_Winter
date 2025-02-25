@@ -1,0 +1,1 @@
+We exploit the fuzzer’s difficulty producing inputs meeting precise, complex invariants—here, an exact 1024-byte all-ones pattern—which is extremely unlikely via random mutation processes.
