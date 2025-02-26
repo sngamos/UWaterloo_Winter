@@ -1,0 +1,11 @@
+Package 3 Method:
+This method exploits the fuzzer's inability to generate inputs with fully specific structural properties—in this case, a sorted input. The code requires the input bytes to be in strict ascending order to trigger the bug.
+How the code works:
+- The program iterates over the input and verifies that each byte is in non-decreasing order.
+- When the entire input is confirmed as sorted, a specific bug (e.g., a crash) is triggered.
+Obtaining Hardcoded Information:
+- The sorted order requirement is a structural invariant built directly into the code.
+Critical Steps/Algorithms:
+- Sorted Check: The code uses a loop to ensure each byte is less than or equal to the next.
+- Trigger Condition: Once the input is confirmed sorted, the predetermined error condition (or crash) is executed.
+

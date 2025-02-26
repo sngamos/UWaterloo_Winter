@@ -1,0 +1,11 @@
+Package 1 Method:
+This method exploits a precision hash match to trigger a divide-by-zero bug when the input exactly equals a specific 64-byte sample. Because the trigger condition is so exact, AFL’s random mutation strategies rarely stumble upon this sample.
+How code works:
+- The code computes a hash of the input and compares it to a hardcoded 64-byte sample.
+- If and only if the input exactly matches the sample, the code intentionally performs a division by zero to trigger a bug.
+Critical steps in algorithm:
+- Precision Hashing: Ensures that even a single byte difference prevents triggering the bug.
+- Exact Comparison: A strict equality check is used to compare the input against the sample.
+- Divide-by-Zero Trigger: Once the condition is met, a deliberate divide-by-zero operation is performed.
+
+

@@ -1,0 +1,12 @@
+Package 5 Method:
+This method targets the fuzzer's difficulty in satisfying rigid, interdependent structural conditions. The code is designed to crash when it receives a 64 byte long palindrome input, which is a sequence that reads the same forwards and backwards.
+How the code works:
+- The program checks if the input string is 64 byte long, if less than 64 bytes, pad till 64 bytes long
+- Compare corresponding characters from the start and end of the input, using input[i] - input[len(input)-i]
+- For all 0 < i < n/2 values, sum up all the differences, if it is palindrome, the value of the sum = 0.
+- trigger divide by 0 by doing 1/sum
+Critical Steps/Algorithms:
+- Palindrome Check: A loop (or two-pointer technique) is used to compare characters from both ends of the input.
+- Interdependent Structure: The check inherently requires a relationship between all parts of the input, making it hard for random mutations to satisfy.
+- Error Trigger: Upon confirming the input is a palindrome, the error condition is executed.
+

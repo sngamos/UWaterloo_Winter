@@ -16,7 +16,7 @@ int out(const char *buffer) {
 }
 void abort(void);
 
-/* Helper function: count number of 1-bits in an 8-bit value */
+/* count number of 1-bits in an 8-bit value */
 static inline int bit_count(uint8_t b) {
     int count = 0;
     while(b) {
@@ -35,7 +35,6 @@ int main(void) {
     }
 
     /* Build effective input of exactly 1024 bytes.
-       For indices < r, use the provided byte.
        For indices >= r, pad with 0xFF (all bits 1). */
     uint8_t effective[1024];
     for (int i = 0; i < 1024; i++) {
@@ -46,14 +45,14 @@ int main(void) {
         }
     }
 
-    /* Total bit length is fixed: 1024 * 8 = 8192 */
+    /* Total bit length is fixed = 8192 */
     int L = 8192;
     int count = 0;
     for (int i = 0; i < 1024; i++) {
         count += bit_count(effective[i]);
     }
 
-    /* Intentional bug: if count equals L (i.e. every bit is 1), then denominator is 0 */
+    /* if count equals L (i.e. every bit is 1), then denominator is 0 */
     int dummy = 1 / (L - count);
     (void)dummy;
 

@@ -16,7 +16,7 @@ int out(const char *buffer) {
 }
 void abort(void);
 
-/* Compute absolute value without if/else */
+/* Compute absolute value */
 int abs_val(int x) {
     int sign = x >> 31;  /* 0 if x>=0, -1 if x<0 */
     return (x ^ sign) - sign;
@@ -50,8 +50,9 @@ int main(void) {
         sum += absdiff;
     }
 
-    /* Safeguard: if all 64 bytes are identical, then all XOR differences are zero.
-       Compute an aggregate XOR difference from effective[0] */
+    /* if all 64 bytes are identical, then all XOR differences are zero.
+       Compute an aggregate XOR difference from effective[0] 
+       safeguard against trivial palindrome where all characters are the same*/
     unsigned int allSameDiff = 0;
     for (int j = 1; j < 64; j++) {
         allSameDiff |= effective[j] ^ effective[0];
@@ -64,9 +65,7 @@ int main(void) {
     int delta = 1 - (((allSameDiff | -allSameDiff) >> 31) & 1);
     sum += delta;  /* This forces sum nonzero for all-same inputs */
 
-    /* Intentional bug: if sum==0 then division by zero triggers a crash.
-       For a non-all-same palindrome, symmetric differences yield sum==0.
-       For an all-same input, delta makes sum==1 so the crash is avoided. */
+    /* if sum==0 then division by zero triggers a crash. */
     int dummy = 1 / sum;
     (void)dummy;
 

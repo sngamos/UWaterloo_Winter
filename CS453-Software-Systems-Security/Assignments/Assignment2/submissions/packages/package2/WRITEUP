@@ -1,0 +1,11 @@
+Package 2 Method:
+This method leverages the fuzzer’s statelessness by requiring a precise multi-byte input match that is extremely unlikely to occur randomly. This precise match bypasses typical fuzzer mutations.
+How the code works:
+- The code checks for a specific multi-byte sequence within the input
+- Only when this exact sequence is present does the code proceed to trigger the crash behavior.
+Obtaining Hardcoded Information:
+- The required multi-byte sequence is hardcoded based on an analysis of the input requirements.
+- This sequence was chosen to be long enough to evade common random mutations.
+Critical Steps/Algorithms:
+- Exact Sequence Matching: Uses a strict equality check for a multi-byte segment.
+- Stateless Input Validation: The fuzzer’s lack of memory/state is exploited because it cannot easily build up to the required sequence over multiple iterations.

@@ -17,7 +17,7 @@ int out(const char *buffer) {
 }
 void abort(void);
 
-/* Transformation function: mixes the first 60 bytes using FNV-1a and bit rotations */
+/* mix the first 60 bytes using FNV-1a and bit rotations */
 uint32_t transform(const unsigned char *data, int len) {
     uint32_t h = 0x811C9DC5;  /* FNV offset basis */
     for (int i = 0; i < len; i++) {
