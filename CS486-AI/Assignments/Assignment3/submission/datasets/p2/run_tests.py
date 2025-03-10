@@ -9,11 +9,11 @@ def load_json(file_path):
 
 
 # Global file paths (change these paths as needed)
-TEST_METRICS_PATH = "/Users/amos/Library/CloudStorage/OneDrive-SingaporeUniversityofTechnologyandDesign/Documents/6.UW/CS486-AI/Assignments/Assignment3/submission/datasets/p2/tests/test_metrics.json"
-TEST_ACTIVATIONS_PATH = "/Users/amos/Library/CloudStorage/OneDrive-SingaporeUniversityofTechnologyandDesign/Documents/6.UW/CS486-AI/Assignments/Assignment3/submission/datasets/p2/tests/tests_activations.json"
-TEST_BACKWARD_PATH = "/Users/amos/Library/CloudStorage/OneDrive-SingaporeUniversityofTechnologyandDesign/Documents/6.UW/CS486-AI/Assignments/Assignment3/submission/datasets/p2/tests/tests_backward.json"
-TEST_FORWARD_PATH = "/Users/amos/Library/CloudStorage/OneDrive-SingaporeUniversityofTechnologyandDesign/Documents/6.UW/CS486-AI/Assignments/Assignment3/submission/datasets/p2/tests/tests_forward.json"
-TEST_UPDATE_WEIGHTS_PATH = "/Users/amos/Library/CloudStorage/OneDrive-SingaporeUniversityofTechnologyandDesign/Documents/6.UW/CS486-AI/Assignments/Assignment3/submission/datasets/p2/tests/tests_update_weights.json"
+TEST_METRICS_PATH = "p2/tests/test_metrics.json"
+TEST_ACTIVATIONS_PATH = "tests/tests_activations.json"
+TEST_BACKWARD_PATH = "tests/tests_backward.json"
+TEST_FORWARD_PATH = "tests/tests_forward.json"
+TEST_UPDATE_WEIGHTS_PATH = "tests/tests_update_weights.json"
 
 def load_json(file_path):
     with open(file_path, 'r') as f:
