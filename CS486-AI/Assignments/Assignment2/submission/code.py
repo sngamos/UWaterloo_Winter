@@ -42,7 +42,6 @@ def load_data(data_file_name,label_file):
     return docs,labels
 
 #testing load_data function
-##print(load_data('/Users/amos/Library/CloudStorage/OneDrive-SingaporeUniversityofTechnologyandDesign/Documents/6.UW/CS486-AI/Assignments/Assignment2/dataset/trainData.txt','/Users/amos/Library/CloudStorage/OneDrive-SingaporeUniversityofTechnologyandDesign/Documents/6.UW/CS486-AI/Assignments/Assignment2/dataset/trainLabel.txt')[0])
 
 def load_words(words_file):
     #mapping word_id to actual word
@@ -52,7 +51,6 @@ def load_words(words_file):
             word_map[idx] = line.strip()
     return word_map
 #testing load_words function
-#print(load_words('/Users/amos/Library/CloudStorage/OneDrive-SingaporeUniversityofTechnologyandDesign/Documents/6.UW/CS486-AI/Assignments/Assignment2/dataset/words.txt'))
 
 # --- Decision Tree Node Class ---
 class DecisionTreeNode:

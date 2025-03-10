@@ -13,7 +13,7 @@ def load_dataset(csv_path, target_feature):
     X = dataset.drop([target_feature], axis=1).to_numpy()
     return X, t
 
-X, y = load_dataset("data/wine_quality.csv", "quality")
+X, y = load_dataset("/Users/amos/Library/CloudStorage/OneDrive-SingaporeUniversityofTechnologyandDesign/Documents/6.UW/CS486-AI/Assignments/Assignment3/submission/datasets/p2/data/wine_quality.csv", "quality")
 
 n_features = X.shape[1]
 net = NeuralNetwork(n_features, [32,32,16,1], [ReLU(), ReLU(), Sigmoid(), Identity()], MeanSquaredError(), learning_rate=0.001)

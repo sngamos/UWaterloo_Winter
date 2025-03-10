@@ -61,8 +61,25 @@ class NeuralNetwork():
         #####################################
         # YOUR CODE HERE
         #####################################
-        return None, None
-
+        n =  X.shape[0]
+        A_vals = []
+        Z_vals = []
+        A_prev = X #initial activation is the input
+        for i in range(self.n_layers):
+            # add column of ones to incorporate bias since first row of W[i] are bias weights 
+            A_with_bias = np.concatenate((np.ones((n, 1)), A_prev), axis=1)
+            # calc linear combination of weights and activations
+            Z = np.dot(A_with_bias, self.W[i])
+            Z_vals.append(Z)
+            # for hidden layers, apply non-linear activation, for output layer, use identity activation
+            if i < self.n_layers - 1:
+                A=Z
+            else:
+                A = self.activations[i].value(Z)
+            A_vals.append(A)
+            A_prev = A
+        return A_vals, Z_vals
+    
     def backward_pass(self, A_vals, dLdyhat) -> List[np.ndarray]:
         '''
         Executes the backward pass of the network on a dataset of n examples with f features. The delta values are
@@ -77,7 +94,24 @@ class NeuralNetwork():
         #####################################
         # YOUR CODE HERE
         #####################################
-        return None
+
+        #init list for deltas
+        deltas = [None] * self.n_layers
+        n = dLdyhat.shape[0]
+        # for output layer, with identity activation, delta is just the derivative of the loss
+        deltas[-1] = dLdyhat
+
+        # propagate error backwards for hidden layers
+        for i in reversed(range(self.n_layers-1)):
+            # when propagating the error, remove the bias weight from next layer
+            W_no_bias = self.W[i+1][1:, :]
+            #back propogate delta
+            print("deltas i+1",deltas[i+1])
+            print("W_no_bias",W_no_bias)
+            print("self.activations[i].derivative(A_vals[i])",self.activations[i].derivative(A_vals[i]))
+            deltas[i] = np.dot(deltas[i+1], W_no_bias.T) * self.activations[i].derivative(A_vals[i])
+            
+        return deltas
 
     def update_weights(self, X, Z_vals, deltas) -> List[np.ndarray]:
         '''
@@ -94,7 +128,47 @@ class NeuralNetwork():
         #####################################
         # YOUR CODE HERE
         #####################################
-        return None
+        n = X.shape[0]  # number of training examples
+
+        # ----------------
+        # 1) Update layer 0 weights
+        # The "input to layer 0" is X. We prepend a column of ones for the bias.
+        # grad_W^0 = (A_prev_with_bias)^T @ deltas[0]
+        # where A_prev_with_bias is [1, X].
+        A_prev_with_bias = np.concatenate([np.ones((n, 1)), X], axis=1)
+        grad_W0 = np.dot( A_prev_with_bias.T,deltas[0])  # shape: (f+1, layer_sizes[0])
+        self.W[0] -= self.learning_rate * grad_W0
+
+        # ----------------
+        # 2) Update subsequent layers
+        # For layer i, the "input to layer i" is the activation of Z_vals[i-1].
+        # We apply the stored activation function (unless it's the output layer with identity).
+        for i in range(1, self.n_layers):
+            # Recompute the activation that was fed into layer i
+            if i == 1:
+                # the input to layer 1 is the activation of Z_vals[0]
+                # if the first layer is not the output layer, apply self.activations[0]
+                if self.n_layers > 1:
+                    A_prev = self.activations[0].value(Z_vals[0])
+                else:
+                    # if there's only one layer in total, then it's output => identity
+                    A_prev = Z_vals[0]
+            else:
+                # input to layer i is activation of Z_vals[i-1]
+                # For hidden layers, apply self.activations[i-1].
+                # If i-1 is the last layer, it might be identity for regression.
+                if i == self.n_layers - 1:
+                    # the previous layer was the last hidden layer, so apply its activation
+                    A_prev = self.activations[i-1].value(Z_vals[i-1])
+                else:
+                    A_prev = self.activations[i-1].value(Z_vals[i-1])
+
+            # Prepend a column of ones to incorporate the bias
+            A_prev_with_bias = np.concatenate([np.ones((n, 1)), A_prev], axis=1)
+            grad_Wi = np.dot(A_prev_with_bias.T, deltas[i])  # shape: (layer_sizes[i-1]+1, layer_sizes[i])
+            self.W[i] -= self.learning_rate * grad_Wi
+
+        return self.W
 
     def train(self, X: np.ndarray, y: np.ndarray, epochs: int) -> (List[np.ndarray], List[float]):
         '''

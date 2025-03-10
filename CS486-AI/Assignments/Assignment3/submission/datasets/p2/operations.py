@@ -75,7 +75,7 @@ class Sigmoid(Activation):
         '''
         #### YOUR CODE HERE ####
         '''
-        return x
+        return 1.0/ (1.0 + np.exp(-self.k*x))
 
     def derivative(self, x: np.ndarray) -> np.ndarray:
         '''
@@ -86,7 +86,8 @@ class Sigmoid(Activation):
         '''
         #### YOUR CODE HERE ####
         '''
-        return x
+        s = self.value(x)
+        return self.k * s * (1 - s)
 
 
 class ReLU(Activation):
@@ -106,7 +107,7 @@ class ReLU(Activation):
         '''
         #### YOUR CODE HERE ####
         '''
-        return x
+        return np.maximum(0, x)
 
     def derivative(self, x: np.ndarray) -> np.ndarray:
         '''
@@ -118,7 +119,7 @@ class ReLU(Activation):
         '''
         #### YOUR CODE HERE ####
         '''
-        return x
+        return (x>0).astype(float)    
 
 
 ##################################################################################################################
@@ -167,7 +168,7 @@ class MeanSquaredError(Loss):
         '''
         #### YOUR CODE HERE ####
         '''
-        return y_hat
+        return np.mean((y_hat - y)**2)
 
     def derivative(self, y_hat: np.ndarray, y: np.ndarray) -> np.ndarray:
         '''
@@ -180,7 +181,8 @@ class MeanSquaredError(Loss):
         '''
         #### YOUR CODE HERE ####
         '''
-        return y_hat
+        n = y.shape[0]
+        return 2* (y_hat - y) / n
 
 
 ##################################################################################################################
@@ -199,4 +201,4 @@ def mean_absolute_error(y_hat: np.ndarray, y: np.ndarray) -> float:
     '''
     #### YOUR CODE HERE ####
     '''
-    return 0.
+    return np.mean(np.abs(y_hat - y))

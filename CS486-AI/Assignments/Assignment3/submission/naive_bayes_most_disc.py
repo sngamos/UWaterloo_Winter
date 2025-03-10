@@ -1,25 +1,21 @@
-# CS486 Assignment 3 writeup
-Name: Sng Amos
-Student ID: 21175177
-
-## Naive Bayes Learning 
-### a. Naive Bayes classifier 
-Print out of Naive Bayes Classifier code:
-```python
 from collections import defaultdict
 import math
 
+# ---------------- Data Loading Functions ----------------
+
 def load_data(data_file_name, label_file):
-    docs = defaultdict(set)
+    # This function reads document-word pairs and document labels from files.
+    # It creates a dictionary mapping each document (by its ID) to a set of word IDs.
+    docs = defaultdict(set)  # Using a defaultdict to automatically create a set for each document.
     with open(data_file_name, 'r') as data_file:
         for line in data_file:
             parts = line.strip().split()  # Split each line into doc_id and word_id.
             if len(parts) != 2:
-                continue 
+                continue  # Skip lines that do not have exactly 2 parts.
             doc_id, word_id = int(parts[0]), int(parts[1])
-            docs[doc_id].add(word_id)
+            docs[doc_id].add(word_id)  # Add the word_id to the set corresponding to doc_id.
     
-    #read the labels from the label file, each line corresponds to a document's label.
+    # Now read the labels from the label file; each line corresponds to a document's label.
     labels = {}
     with open(label_file, 'r') as label_file_obj:
         for idx, line in enumerate(label_file_obj, start=1):
@@ -34,13 +30,29 @@ def load_words(words_file):
             word_map[idx] = line.strip()  # Map the line number (word_id) to the word.
     return word_map
 
-# Naive Bayes training function
+# ---------------- Naïve Bayes Training Functions ----------------
 
 def train_naive_bayes(train_docs, train_labels, V):
+    """
+    Trains a Naïve Bayes classifier using maximum likelihood estimation.
+    
+    Parameters:
+      - train_docs: List of sets, where each set contains word IDs present in a document.
+      - train_labels: List of labels (1 or 2) corresponding to each document.
+      - V: Vocabulary size (total number of words).
+    
+    Returns:
+      - class_priors: List containing the prior probabilities for each class.
+      - cond_probs: 2D list (2 x (V+1)) containing the conditional probability of each word given a class,
+                    computed using Laplace smoothing.
+    """
     num_docs = len(train_docs)
-    class_counts = [0, 0]  # Counters for the two classes
+    class_counts = [0, 0]  # Counters for the two classes: index 0 for label 1 and index 1 for label 2.
+    # Create a matrix to count how many documents in each class contain each word.
+    # We use V+1 so that word ID i corresponds to index i (ignoring index 0).
     word_counts = [[0] * (V + 1) for _ in range(2)]
     
+    # Count documents per class and count word occurrences per class.
     for i in range(num_docs):
         label = train_labels[i]
         class_index = label - 1  # Convert label (1 or 2) to index (0 or 1).
@@ -49,30 +61,42 @@ def train_naive_bayes(train_docs, train_labels, V):
             if 1 <= word_id <= V:
                 word_counts[class_index][word_id] += 1  # Increment count for word in the given class.
     
-    # calc class priors
+    # Compute class priors: the fraction of documents that belong to each class.
     class_priors = [count / num_docs for count in class_counts]
     
-    # calc conditional probabilities with Laplace smoothing.
+    # Compute conditional probabilities with Laplace smoothing.
+    # Laplace smoothing helps avoid zero probabilities.
     cond_probs = [[0] * (V + 1) for _ in range(2)]
     for c in range(2):
         for w in range(1, V + 1):
+            # Laplace correction: add 1 to the numerator and 2 to the denominator.
             cond_probs[c][w] = (word_counts[c][w] + 1) / (class_counts[c] + 2)
     
     return class_priors, cond_probs
 
-# prediction function
+# ---------------- Prediction Functions ----------------
 
 def compute_log_scores(doc, class_priors, cond_probs, V):
+    """
+    Computes the log-probability scores for each class for a given document.
+    
+    Instead of multiplying many small probabilities (which can lead to underflow),
+    we work in the logarithmic domain and sum the log probabilities.
+    
+    For a class c:
+      log P(c|doc) ∝ log(P(c)) + Σ (for all words not in doc: log(1 - p(w|c)))
+                     + Σ (for words in doc: [log(p(w|c)) - log(1 - p(w|c))])
+    """
     scores = [0, 0]
     for c in range(2):
-        # log the prior probability
+        # Start with the log of the prior probability.
         score = math.log(class_priors[c])
         total = 0.0
-        # Sum the contribution of words that are not present in the document
+        # Sum over the contribution of words that are not present in the document.
         for w in range(1, V + 1):
             total += math.log(1 - cond_probs[c][w])
         score += total
-        # Adjust score for each word present in the document
+        # Adjust the score for each word present in the document.
         for w in doc:
             if 1 <= w <= V:
                 score += math.log(cond_probs[c][w]) - math.log(1 - cond_probs[c][w])
@@ -80,13 +104,21 @@ def compute_log_scores(doc, class_priors, cond_probs, V):
     return scores
 
 def classify(doc, class_priors, cond_probs, V):
+    """
+    Classifies a document by computing the log scores for each class and choosing the class with the higher score.
+    """
     scores = compute_log_scores(doc, class_priors, cond_probs, V)
-    # if log score for class 1 is higher, return label 1, else, return label 2
+    # If the log score for class 1 is higher, return label 1; otherwise, return label 2.
     return 1 if scores[0] > scores[1] else 2
 
-# Eval function
+# ---------------- Evaluation Function ----------------
 
 def evaluate(docs, labels, class_priors, cond_probs, V):
+    """
+    Evaluates the classifier's performance by computing the accuracy.
+    
+    Accuracy is defined as the percentage of correctly classified documents.
+    """
     correct = 0
     total = len(docs)
     for i in range(total):
@@ -95,39 +127,44 @@ def evaluate(docs, labels, class_priors, cond_probs, V):
             correct += 1
     return (correct / total) * 100
 
-# identify discriminative words
+# ---------------- Function to Identify Discriminative Words ----------------
 
 def print_top_discriminative_words(cond_probs, vocab, V, top_n=10):
+    """
+    Computes and prints the top N most discriminative words based on the absolute difference between
+    log(P(word|label1)) and log(P(word|label2)). A higher difference means the word is more indicative
+    of one class over the other.
+    """
     discriminative_features = []
     for word_id in range(1, V + 1):
-        # Compute log probabilities for both class
+        # Compute log probabilities for both classes.
         log_prob_label1 = math.log(cond_probs[0][word_id])
         log_prob_label2 = math.log(cond_probs[1][word_id])
-        # Compute the absolute difference between the log probabilities
+        # Compute the absolute difference between the log probabilities.
         diff = abs(log_prob_label1 - log_prob_label2)
         discriminative_features.append((word_id, diff))
     
-    # Sort the features by the absolute difference in descending order
+    # Sort the features by the absolute difference in descending order.
     discriminative_features.sort(key=lambda x: x[1], reverse=True)
     
     print("\nTop {} Discriminative Words:".format(top_n))
     for i in range(top_n):
         word_id, diff = discriminative_features[i]
-        # Print the word ID, the corresponding word, and the discriminative score
+        # Print the word ID, the corresponding word, and the discriminative score.
         print("Word ID: {}, Word: '{}', |log P(word|label1) - log P(word|label2)| = {:.4f}".format(
             word_id, vocab[word_id], diff))
 
-# main exec
+# ---------------- Main Execution ----------------
 
 def main():
-    # Load the training and testing data 
+    # Load the training and testing data using our custom data-loading functions.
     train_docs_dict, train_labels_dict = load_data("datasets/p1/trainData.txt", "datasets/p1/trainLabel.txt")
     test_docs_dict, test_labels_dict = load_data("datasets/p1/testData.txt", "datasets/p1/testLabel.txt")
-    # Load the vocabulary
+    # Load the vocabulary to determine the vocabulary size.
     vocab = load_words("datasets/p1/words.txt")
     V = len(vocab)
     
-    # Convert dictionaries to lists
+    # Convert dictionaries to lists (sorted by document ID) so that each document and its label are aligned.
     train_ids = sorted(train_docs_dict.keys())
     train_docs = [train_docs_dict[doc_id] for doc_id in train_ids]
     train_labels = [train_labels_dict[doc_id] for doc_id in train_ids]
@@ -140,62 +177,25 @@ def main():
     print("Number of testing documents:", len(test_docs))
     print("Vocabulary size:", V)
     
-    # Train the Naïve Bayes classifier on the training data
+    # Train the Naïve Bayes classifier on the training data.
+    # This computes both the class priors and the conditional probabilities for each word given a class.
     class_priors, cond_probs = train_naive_bayes(train_docs, train_labels, V)
     
-    # Evaluate the classifier on the training set
+    # Evaluate the classifier on the training set.
     train_accuracy = evaluate(train_docs, train_labels, class_priors, cond_probs, V)
-    # Evaluate the classifier on the testing set
+    # Evaluate the classifier on the testing set.
     test_accuracy = evaluate(test_docs, test_labels, class_priors, cond_probs, V)
     
     print("Training Accuracy: {:.2f}%".format(train_accuracy))
     print("Testing Accuracy: {:.2f}%".format(test_accuracy))
     
-    # Print top 10 discriminative words
+    # ---------------- Discriminative Word Features ----------------
+    # Explanation:
+    # Each word's discriminative power is measured by the absolute difference between log P(word|label1)
+    # and log P(word|label2). A large difference implies that the word is much more indicative of one
+    # class than the other. Here, we compute this difference for every word in the vocabulary,
+    # sort them in descending order, and then print the top 10.
     print_top_discriminative_words(cond_probs, vocab, V, top_n=10)
 
 if __name__ == "__main__":
     main()
-```
-
-
-### b. Discriminative word features
-Top 10 most discriminative word features, ranked in descending order: 
-```
-Word ID: 193, Word: 'christian', absolute difference = 3.5863
-Word ID: 5240, Word: 'religion', absolute difference = 3.5143
-Word ID: 4662, Word: 'atheism', absolute difference = 3.2986
-Word ID: 2437, Word: 'books', absolute difference = 3.2399
-Word ID: 1239, Word: 'christians', absolute difference = 3.2216
-Word ID: 4829, Word: 'library', absolute difference = 3.2161
-Word ID: 199, Word: 'religious', absolute difference = 3.0938
-Word ID: 3163, Word: 'libraries', absolute difference = 3.0883
-Word ID: 6898, Word: 'novel', absolute difference = 3.0883
-Word ID: 3522, Word: 'beliefs', absolute difference = 2.9985
-```
-Yes they are good features in discriminating between the 2 classes.  
-Words like "christian," "religion," and "atheism" are related to discussions surrounding belief systems which would have high likelihood in appearing in a subreddit like r/atheism, which predominantly contains discussions about belief systems and religion.  
-Words like "books," "library," "libraries," and "novel" are clearly aligned to literature, making them highly likely to come from the r/books subreddit, which would predominantly have discussions surrounding the topic of literature. 
-
-### c. Model evaluation (Accuracy)
-Training and Testing accuracy printout:
-```
-Training accuracy: 0.9260273972602739
-Test accuracy: 0.736551724137931
-```
-
-### d. Assumption of independence
-No that assumption might not be applicable to languages because words in natural languages are inherently related. For example, words like "christian" and "religion"
-or "books" and "library" tend to occur in phrases or sentences together due to grammatical or semantic relationships. This means that the presence of one word will influence the presence of a related word, which goes against the assumption of independence, which assumes that the presence of one word does not influence the presence of another.
-
-### e. Extension of Naive Bayes model
-We can use groups of words/short phrases instead of singular words as features.  
-By using short phrases or sentences, we are able to capture teh dependencies between adjacent words, which might possibly improve the Naive Bayes model produced as sentence structures reset every sentence, and adjacent sentences are more likely to be independent of each other.
-
-### f. Using MAP
-If we want to use MAP, we would need to add a prior distribution over the parameters.  
-The MAP algorithm would then maximize the posterior probability of the parameters by maximizing the product of the likelihood of the observed data and the prior, hence combining the observed data with the prior knowledge we defined.
-
-## 2. Neural Networks for Classification and Regression
-
-
