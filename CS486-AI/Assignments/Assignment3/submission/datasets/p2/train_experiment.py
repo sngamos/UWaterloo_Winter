@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-from neural_net import NeuralNetwork
+from neural_network import NeuralNetwork
 from operations import *
 
 def load_dataset(csv_path, target_feature):

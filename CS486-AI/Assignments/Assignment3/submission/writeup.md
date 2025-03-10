@@ -241,4 +241,21 @@ All tests executed successfully.
 =====================================
 ```
 
+### k-fold (k=5) cross validation
+
+**Size of layers and Activation Function**:
+|Layer|Size|Activation|
+|-----|----|----------|
+|Input Layer|11|N/A|
+|Hidden Layer 1|32|ReLU activation|
+|Hidden Layer 2|32|ReLU activation|
+|Hidden Layer 3|16|Sigmoid activation|
+|Output Layer|1|Identity activation|
+
+**Epoch Number vs Average Training Loss Plot**:
+![plot](diagrams/epoch_vs_loss-plot.png){width=50%}
+
+**Mean Absolute Error across all folds**:  
+Average Validation MAE: 0.6677  
+Validation MAE Standard Deviation: 0.0692
 

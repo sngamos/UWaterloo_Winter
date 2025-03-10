@@ -207,4 +207,3 @@ class NeuralNetwork():
         y_hat = Z_vals[-1]
         metric_value = metric(y_hat, y)     # Compute the value of the performance metric for the predictions
         return metric_value
-
