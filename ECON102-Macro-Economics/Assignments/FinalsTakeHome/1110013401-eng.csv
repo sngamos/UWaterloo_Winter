@@ -1,0 +1,37 @@
+﻿"Gini coefficients of adjusted market, total and after-tax income c 1 2 3 4 5 6"
+"Frequency: Annual"
+"Table: 11-10-0134-01 (formerly CANSIM 206-0033)"
+"Release date: 2024-04-26"
+"Geography: Canada, Geographical region of Canada, Province or territory"
+""
+""
+
+"Geography","Quebec",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"British Columbia",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+"Income concept 7","1976","1977","1978","1979","1980","1981","1982","1983","1984","1985","1986","1987","1988","1989","1990","1991","1992","1993","1994","1995","1996","1997","1998","1999","2000","2001","2002","2003","2004","2005","2006","2007","2008","2009","2010","2011","2012","2013","2014","2015","2016","2017","2018","2019","2020","2021","2022","1976","1977","1978","1979","1980","1981","1982","1983","1984","1985","1986","1987","1988","1989","1990","1991","1992","1993","1994","1995","1996","1997","1998","1999","2000","2001","2002","2003","2004","2005","2006","2007","2008","2009","2010","2011","2012","2013","2014","2015","2016","2017","2018","2019","2020","2021","2022"
+"Adjusted total income","0.325","0.318","0.313","0.320","0.315","0.310","0.311","0.315","0.327","0.312","0.317","0.321","0.313","0.308","0.316","0.326","0.318","0.322A","0.331A","0.333A","0.343A","0.342A","0.349A","0.339A","0.348A","0.350A","0.352B","0.346A","0.352B","0.344A","0.342A","0.345A","0.339B","0.332A","0.332B","0.340B","0.341B","0.338B","0.329B","0.329B","0.332A","0.331A","0.330A","0.326A","0.307A","0.312A","0.320A","0.325","0.295","0.308","0.300","0.306","0.304","0.321","0.323","0.329","0.331","0.325","0.324","0.308","0.302","0.328","0.318","0.334","0.320A","0.318A","0.324A","0.339A","0.340A","0.343B","0.353B","0.353B","0.366B","0.378B","0.360A","0.363A","0.364B","0.355B","0.349B","0.346B","0.355B","0.357B","0.346B","0.348B","0.351B","0.346B","0.346A","0.332B","0.339B","0.341A","0.339B","0.316B","0.327B","0.347A"
+"Adjusted after-tax income","0.295","0.289","0.280","0.285","0.277","0.280","0.273","0.275","0.287","0.276","0.282","0.283","0.269","0.266","0.269","0.278","0.270","0.274A","0.278A","0.280A","0.290A","0.290A","0.295A","0.284A","0.294A","0.298A","0.301B","0.295A","0.299A","0.296A","0.293A","0.294A","0.293B","0.286A","0.286A","0.291A","0.296B","0.291A","0.280B","0.284B","0.283A","0.287A","0.283A","0.282A","0.261A","0.264A","0.270A","0.297","0.272","0.283","0.276","0.287","0.280","0.293","0.293","0.298","0.302","0.296","0.290","0.276","0.270","0.290","0.283","0.295","0.285A","0.282A","0.289A","0.298A","0.302A","0.304B","0.312B","0.312A","0.328B","0.341B","0.324A","0.328A","0.325B","0.320A","0.314B","0.311B","0.321B","0.322B","0.312B","0.314B","0.318B","0.309B","0.314A","0.298B","0.303B","0.304A","0.305B","0.280A","0.291B","0.306A"
+
+Symbol legend:
+A, data quality: excellent
+B, data quality: very good
+
+
+"Table Corrections:"
+Date,Note
+"","On February 24, 2020, the Canada adjusted after-tax income Gini coefficent was corrected for 2017."
+
+
+
+Footnotes:
+1,"Source: Centre for Income and Socioeconomic Well-being Statistics, Statistics Canada"
+2,"Data quality indicators are based on the coefficient of variation (CV) and number of observations. Quality indicators indicate the following: A - Excellent (CV between 0% and 2%); B - Very good (CV between 2% and 4%); C - Good (CV between 4% and 8%); D - Acceptable (CV between 8% and 16%); E - Use with caution (CV between 16% and 33.3%)."
+3,"The Gini coefficient is a number between zero and one that measures the relative degree of inequality in the distribution of income. The coefficient would register zero (minimum inequality) for a population in which each person received exactly the same adjusted household income and it would register a coefficient of one (maximum inequality) if one person received all the adjusted household income and the rest received none. Even though a single Gini coefficient value has no simple interpretation, comparisons of the level over time or between populations are very straightforward: the higher the coefficient, the higher the inequality of the distribution."
+4,"Estimates are based on data from the following surveys: the Survey of Consumer Finances (SCF) from 1976 to 1992, a combination of the SCF and the Survey of Labour and Income Dynamics (SLID) from 1993 to 1997, the SLID from 1998 to 2011 and the Canadian Income Survey (CIS) beginning in 2012. For more information, see Statistics Canada, 2015, "Revisions to 2006 to 2011 income data", Income Research Paper Series, Cat. no. 75F0002MIE - No. 003. Also, two previous revisions of income data are described in Cotton, Cathy, 2000, "Bridging Two Surveys: An Integrated Series of Income Data from SCF and SLID 1989-1997", Statistics Canada, Cat. No. 75F0002MIE - No. 002, and Lathe, Heather, 2005, "Survey of Labour and Income Dynamics: 2003 Historical Revision", Statistics Canada, Cat. No. 75F0002MIE - No. 009."
+5,"Income estimates from the Survey of Consumer Finances and the Canadian Income Survey for the 2022 reference year and onwards include income for persons aged 15 years and over. Income estimates from the Survey of Labour and Income Dynamics and the Canadian Income Survey for reference years prior to 2022 include income data for persons aged 16 years and over."
+6,"In recent years, the Canadian Income Survey (CIS) has introduced improvements to the methods and sources used to produce income estimates. Beginning with the 2021 reference year, CIS income data were produced from the Administrative Personal Income Masterfile, a comprehensive source of personal income data generated not only from T1 tax returns, but also from associated tax slips. CIS estimates for previous years were produced using T1 tax returns only. Please consult the document <a href=https://www150.statcan.gc.ca/n1/pub/75f0002m/75f0002m2023005-eng.htm rel="external noopener noreferrer" target="_blank">Improvements to the Canadian Income Survey Methodology for the 2021 Reference Year (opens new window)</a> for more information. More improvements were introduced with the 2022 reference year. Foremost among these improvements is a significant increase in the sample size for a large subset of the CIS content. The weighting methodology was also improved and the target population for income data was changed from persons aged 16 years and over to persons aged 15 years and over. Please consult the document <a href=https://www150.statcan.gc.ca/n1/pub/75f0002m/75f0002m2024005-eng.htm rel="external noopener noreferrer" target="_blank">Improvements to the Canadian Income Survey Methodology for the 2022 Reference Year (opens new window)</a> for more information."
+7,"In order to take into account the economies of scale present in larger households, the different types of income are adjusted by dividing the household income by the square root of the household size."
+
+
+
+"How to cite: Statistics Canada. Table 11-10-0134-01  Gini coefficients of adjusted market, total and after-tax income"
+https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=1110013401
